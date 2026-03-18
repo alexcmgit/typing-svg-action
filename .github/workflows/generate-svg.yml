@@ -70,6 +70,23 @@ jobs:
             const repo = context.repo.repo;
             const rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/static/svg/typing-${issueNum}.svg`;
             
+            // Delete previous bot comments
+            const comments = await github.rest.issues.listComments({
+              owner,
+              repo,
+              issue_number: issueNum
+            });
+            
+            for (const comment of comments.data) {
+              if (comment.user?.type === 'Bot') {
+                await github.rest.issues.deleteComment({
+                  owner,
+                  repo,
+                  comment_id: comment.id
+                });
+              }
+            }
+            
             await github.rest.issues.createComment({
               owner,
               repo,
