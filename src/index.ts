@@ -44,17 +44,8 @@ export async function generateFromIssue({ github, context, core }: GenerateOptio
     fs.writeFileSync(svgPath, svg);
     
     core.setOutput('svg_path', svgPath);
-    
-    // Comment on the issue with the SVG preview
-    const svgBase64 = Buffer.from(svg).toString('base64');
-    const dataUri = `data:image/svg+xml;base64,${svgBase64}`;
-    
-    await github.rest.issues.createComment({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      issue_number: issue.number,
-      body: `## Generated Typing SVG\n\n![Typing SVG](${dataUri})\n\n<details>\n<summary>Raw SVG</summary>\n\n\`\`\`xml\n${svg}\n\`\`\`\n</details>`,
-    });
+    core.setOutput('svg_content', svg);
+    core.setOutput('issue_number', issue.number.toString());
     
     core.info(`SVG generated and saved to ${svgPath}`);
   } catch (error) {
