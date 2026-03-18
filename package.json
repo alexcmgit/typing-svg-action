@@ -1,6 +1,7 @@
 {
   "name": "typing-svg-action",
   "version": "1.0.0",
+  "packageManager": "yarn@4.6.0",
   "description": "GitHub Action to generate typing SVGs from issue YAML",
   "main": "dist/index.js",
   "scripts": {
