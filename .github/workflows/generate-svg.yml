@@ -44,6 +44,10 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
+          # Discard any local changes before switching branches
+          git checkout .
+          git clean -fd
+          
           # Check if static branch exists
           if git ls-remote --exit-code --heads origin static; then
             git fetch origin static
