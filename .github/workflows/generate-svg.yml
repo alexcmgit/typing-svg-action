@@ -41,6 +41,9 @@ jobs:
           SVG_PATH="${{ steps.generate.outputs.svg_path }}"
           ISSUE_NUM="${{ github.event.issue.number }}"
           
+          # Save SVG to temp location before cleaning
+          cp "$GITHUB_WORKSPACE/output/typing-${ISSUE_NUM}.svg" "/tmp/typing-${ISSUE_NUM}.svg"
+          
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
@@ -57,9 +60,9 @@ jobs:
             git rm -rf .
           fi
           
-          # Copy SVG and commit
+          # Copy SVG from temp and commit
           mkdir -p svg
-          cp "$GITHUB_WORKSPACE/output/typing-${ISSUE_NUM}.svg" "svg/typing-${ISSUE_NUM}.svg"
+          cp "/tmp/typing-${ISSUE_NUM}.svg" "svg/typing-${ISSUE_NUM}.svg"
           git add "svg/typing-${ISSUE_NUM}.svg"
           git commit -m "Update typing SVG for issue #${ISSUE_NUM}" || echo "No changes"
           git push origin static
